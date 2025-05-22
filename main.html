@@ -22,13 +22,7 @@
       left: 0;
     }
 
-    .carrusel-slide.exit-left {
-      left: -100%;
-    }
-
-    .carrusel-slide.exit-right {
-      left: 100%;
-    }
+    /* No hace falta exit-left y exit-right, controlamos con JS con left directamente */
 
     .carrusel-nav {
       position: absolute;
@@ -40,6 +34,7 @@
       color: white;
       cursor: pointer;
       z-index: 10;
+      user-select: none;
     }
 
     .carrusel-nav.left {
@@ -65,6 +60,7 @@
       background-color: rgba(255, 255, 255, 0.6);
       border-radius: 50%;
       cursor: pointer;
+      user-select: none;
     }
 
     .carrusel-indicators .active {
@@ -138,10 +134,34 @@
     const slides = document.querySelectorAll(".carrusel-slide");
     const indicatorContainer = document.getElementById("carrusel-indicators");
     let current = 0;
+    let animating = false;
 
     function actualizarCarrusel(nuevo) {
-      slides[current].classList.remove("active");
+      if (animating || nuevo === current) return;
+
+      animating = true;
+      const direccion = (nuevo > current || (nuevo === 0 && current === slides.length - 1)) ? 1 : -1;
+
+      // Posición inicial slide nuevo
+      slides[nuevo].style.left = (direccion === 1 ? "100%" : "-100%");
       slides[nuevo].classList.add("active");
+
+      // Forzar reflow
+      slides[nuevo].offsetHeight;
+
+      // Mover slide actual fuera
+      slides[current].style.left = (direccion === 1 ? "-100%" : "100%");
+
+      // Mover slide nuevo al centro
+      slides[nuevo].style.left = "0";
+
+      slides[current].addEventListener("transitionend", function handler() {
+        slides[current].classList.remove("active");
+        slides[current].style.left = "100%";
+        animating = false;
+        slides[current].removeEventListener("transitionend", handler);
+      });
+
       actualizarIndicadores(nuevo);
       current = nuevo;
     }
