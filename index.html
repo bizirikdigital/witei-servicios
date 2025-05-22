@@ -1,33 +1,30 @@
 <div id="servicios-carrusel" style="font-family: Arial, sans-serif; color: #fff; position: relative; overflow: hidden; border-radius: 10px; max-width: 100%; height: 400px;">
   <style>
+    #servicios-carrusel {
+      --transition-time: 0.5s;
+    }
     .carrusel-slide {
       background-image: url('https://i.ibb.co/s9wfsmP2/disparo-para-la-composicion-panoramica-del-interior-vacio.jpg');
       background-size: cover;
       background-position: center;
       position: absolute;
       top: 0;
-      left: 100%;
+      left: 0;
       width: 100%;
       height: 100%;
       padding: 40px;
       box-sizing: border-box;
-      transition: left 0.5s ease-in-out;
       display: flex;
       flex-direction: column;
       justify-content: center;
       backdrop-filter: brightness(0.6);
+      color: white;
+      transition: transform var(--transition-time) ease-in-out;
+      will-change: transform;
     }
 
-    .carrusel-slide.active {
-      left: 0;
-    }
-
-    .carrusel-slide.exit-left {
-      left: -100%;
-    }
-
-    .carrusel-slide.exit-right {
-      left: 100%;
+    .carrusel-slide.hidden {
+      pointer-events: none;
     }
 
     .carrusel-nav {
@@ -40,6 +37,7 @@
       color: white;
       cursor: pointer;
       z-index: 10;
+      user-select: none;
     }
 
     .carrusel-nav.left {
@@ -55,6 +53,7 @@
       bottom: 20px;
       width: 100%;
       text-align: center;
+      z-index: 10;
     }
 
     .carrusel-indicators span {
@@ -65,6 +64,7 @@
       background-color: rgba(255, 255, 255, 0.6);
       border-radius: 50%;
       cursor: pointer;
+      user-select: none;
     }
 
     .carrusel-indicators .active {
@@ -87,7 +87,7 @@
     }
   </style>
 
-  <div class="carrusel-slide active">
+  <div class="carrusel-slide" style="transform: translateX(0%);">
     <h2>1. Compra y Venta de Inmuebles</h2>
     <ul>
       <li>Asesoramiento en la compra y venta de propiedades residenciales, comerciales y de inversión.</li>
@@ -96,7 +96,7 @@
     </ul>
   </div>
 
-  <div class="carrusel-slide">
+  <div class="carrusel-slide" style="transform: translateX(100%);">
     <h2>2. Alquiler de Propiedades</h2>
     <ul>
       <li>Gestión integral de alquileres residenciales y comerciales.</li>
@@ -104,7 +104,7 @@
     </ul>
   </div>
 
-  <div class="carrusel-slide">
+  <div class="carrusel-slide" style="transform: translateX(100%);">
     <h2>3. Gestión de Propiedades</h2>
     <ul>
       <li>Administración para propietarios que no pueden gestionar sus inmuebles.</li>
@@ -112,7 +112,7 @@
     </ul>
   </div>
 
-  <div class="carrusel-slide">
+  <div class="carrusel-slide" style="transform: translateX(100%);">
     <h2>4. Inversiones Inmobiliarias</h2>
     <ul>
       <li>Análisis de oportunidades en residencial, comercial y terrenos.</li>
@@ -120,7 +120,7 @@
     </ul>
   </div>
 
-  <div class="carrusel-slide">
+  <div class="carrusel-slide" style="transform: translateX(100%);">
     <h2>5. Reformas y Diseño de Inmuebles</h2>
     <ul>
       <li>Asesoramiento en reformas estéticas y funcionales para mejorar el valor de la propiedad.</li>
@@ -138,12 +138,29 @@
     const slides = document.querySelectorAll(".carrusel-slide");
     const indicatorContainer = document.getElementById("carrusel-indicators");
     let current = 0;
+    let animating = false;
 
     function actualizarCarrusel(nuevo) {
-      slides[current].classList.remove("active");
-      slides[nuevo].classList.add("active");
+      if (animating || nuevo === current) return;
+      animating = true;
+
+      slides.forEach((slide, i) => {
+        if (i === nuevo) {
+          slide.style.transform = "translateX(0%)";
+        } else if (i < nuevo) {
+          slide.style.transform = "translateX(-100%)";
+        } else {
+          slide.style.transform = "translateX(100%)";
+        }
+      });
+
       actualizarIndicadores(nuevo);
-      current = nuevo;
+
+      // Esperar transición antes de liberar bloqueo
+      setTimeout(() => {
+        current = nuevo;
+        animating = false;
+      }, 500); // coincide con transition-time CSS
     }
 
     function moverCarrusel(direccion) {
