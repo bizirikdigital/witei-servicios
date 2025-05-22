@@ -1,0 +1,172 @@
+<div id="servicios-carrusel" style="font-family: Arial, sans-serif; color: #fff; position: relative; overflow: hidden; border-radius: 10px; max-width: 100%; height: 400px;">
+  <style>
+    .carrusel-slide {
+      background-image: url('https://i.ibb.co/s9wfsmP2/disparo-para-la-composicion-panoramica-del-interior-vacio.jpg');
+      background-size: cover;
+      background-position: center;
+      position: absolute;
+      top: 0;
+      left: 100%;
+      width: 100%;
+      height: 100%;
+      padding: 40px;
+      box-sizing: border-box;
+      transition: left 0.5s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      backdrop-filter: brightness(0.6);
+    }
+
+    .carrusel-slide.active {
+      left: 0;
+    }
+
+    .carrusel-slide.exit-left {
+      left: -100%;
+    }
+
+    .carrusel-slide.exit-right {
+      left: 100%;
+    }
+
+    .carrusel-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 30px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      color: white;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .carrusel-nav.left {
+      left: 10px;
+    }
+
+    .carrusel-nav.right {
+      right: 10px;
+    }
+
+    .carrusel-indicators {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .carrusel-indicators span {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin: 0 5px;
+      background-color: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .carrusel-indicators .active {
+      background-color: #fff;
+    }
+
+    .carrusel-slide h2 {
+      font-size: 36px;
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+
+    .carrusel-slide ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .carrusel-slide li {
+      margin-bottom: 8px;
+    }
+  </style>
+
+  <div class="carrusel-slide active">
+    <h2>1. Compra y Venta de Inmuebles</h2>
+    <ul>
+      <li>Asesoramiento en la compra y venta de propiedades residenciales, comerciales y de inversión.</li>
+      <li>Acompañamiento legal y administrativo: contratos, escrituras y gestiones notariales.</li>
+      <li>Asesoramiento en financiación e hipotecas.</li>
+    </ul>
+  </div>
+
+  <div class="carrusel-slide">
+    <h2>2. Alquiler de Propiedades</h2>
+    <ul>
+      <li>Gestión integral de alquileres residenciales y comerciales.</li>
+      <li>Redacción de contratos y trámites legales asociados.</li>
+    </ul>
+  </div>
+
+  <div class="carrusel-slide">
+    <h2>3. Gestión de Propiedades</h2>
+    <ul>
+      <li>Administración para propietarios que no pueden gestionar sus inmuebles.</li>
+      <li>Atención al inquilino, resolución de incidencias y cumplimiento de contratos.</li>
+    </ul>
+  </div>
+
+  <div class="carrusel-slide">
+    <h2>4. Inversiones Inmobiliarias</h2>
+    <ul>
+      <li>Análisis de oportunidades en residencial, comercial y terrenos.</li>
+      <li>Estudio de rentabilidad y riesgos de cada proyecto.</li>
+    </ul>
+  </div>
+
+  <div class="carrusel-slide">
+    <h2>5. Reformas y Diseño de Inmuebles</h2>
+    <ul>
+      <li>Asesoramiento en reformas estéticas y funcionales para mejorar el valor de la propiedad.</li>
+    </ul>
+  </div>
+
+  <!-- Flechas -->
+  <div class="carrusel-nav left" onclick="moverCarrusel(-1)">&#10094;</div>
+  <div class="carrusel-nav right" onclick="moverCarrusel(1)">&#10095;</div>
+
+  <!-- Puntos -->
+  <div class="carrusel-indicators" id="carrusel-indicators"></div>
+
+  <script>
+    const slides = document.querySelectorAll(".carrusel-slide");
+    const indicatorContainer = document.getElementById("carrusel-indicators");
+    let current = 0;
+
+    function actualizarCarrusel(nuevo) {
+      slides[current].classList.remove("active");
+      slides[nuevo].classList.add("active");
+      actualizarIndicadores(nuevo);
+      current = nuevo;
+    }
+
+    function moverCarrusel(direccion) {
+      let nuevo = (current + direccion + slides.length) % slides.length;
+      actualizarCarrusel(nuevo);
+    }
+
+    function actualizarIndicadores(indiceActivo) {
+      const indicadores = indicatorContainer.querySelectorAll("span");
+      indicadores.forEach((dot, i) => {
+        dot.className = i === indiceActivo ? "active" : "";
+      });
+    }
+
+    function crearIndicadores() {
+      slides.forEach((_, i) => {
+        const dot = document.createElement("span");
+        if (i === 0) dot.classList.add("active");
+        dot.addEventListener("click", () => actualizarCarrusel(i));
+        indicatorContainer.appendChild(dot);
+      });
+    }
+
+    crearIndicadores();
+  </script>
+</div>
