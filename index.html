@@ -16,13 +16,17 @@
       flex-direction: column;
       justify-content: center;
       backdrop-filter: brightness(0.6);
+      color: white;
     }
 
     .carrusel-slide.active {
       left: 0;
+      z-index: 2;
     }
 
-    /* No hace falta exit-left y exit-right, controlamos con JS con left directamente */
+    .carrusel-slide.exit {
+      z-index: 1;
+    }
 
     .carrusel-nav {
       position: absolute;
@@ -50,6 +54,7 @@
       bottom: 20px;
       width: 100%;
       text-align: center;
+      z-index: 10;
     }
 
     .carrusel-indicators span {
@@ -83,7 +88,7 @@
     }
   </style>
 
-  <div class="carrusel-slide active">
+  <div class="carrusel-slide active" style="left: 0;">
     <h2>1. Compra y Venta de Inmuebles</h2>
     <ul>
       <li>Asesoramiento en la compra y venta de propiedades residenciales, comerciales y de inversión.</li>
@@ -92,7 +97,7 @@
     </ul>
   </div>
 
-  <div class="carrusel-slide">
+  <div class="carrusel-slide" style="left: 100%;">
     <h2>2. Alquiler de Propiedades</h2>
     <ul>
       <li>Gestión integral de alquileres residenciales y comerciales.</li>
@@ -100,7 +105,7 @@
     </ul>
   </div>
 
-  <div class="carrusel-slide">
+  <div class="carrusel-slide" style="left: 100%;">
     <h2>3. Gestión de Propiedades</h2>
     <ul>
       <li>Administración para propietarios que no pueden gestionar sus inmuebles.</li>
@@ -108,7 +113,7 @@
     </ul>
   </div>
 
-  <div class="carrusel-slide">
+  <div class="carrusel-slide" style="left: 100%;">
     <h2>4. Inversiones Inmobiliarias</h2>
     <ul>
       <li>Análisis de oportunidades en residencial, comercial y terrenos.</li>
@@ -116,7 +121,7 @@
     </ul>
   </div>
 
-  <div class="carrusel-slide">
+  <div class="carrusel-slide" style="left: 100%;">
     <h2>5. Reformas y Diseño de Inmuebles</h2>
     <ul>
       <li>Asesoramiento en reformas estéticas y funcionales para mejorar el valor de la propiedad.</li>
@@ -142,25 +147,30 @@
       animating = true;
       const direccion = (nuevo > current || (nuevo === 0 && current === slides.length - 1)) ? 1 : -1;
 
-      // Posición inicial slide nuevo
-      slides[nuevo].style.left = (direccion === 1 ? "100%" : "-100%");
+      // Preparar slide nuevo para entrar
+      slides[nuevo].style.left = direccion === 1 ? "100%" : "-100%";
       slides[nuevo].classList.add("active");
+      slides[nuevo].style.zIndex = 2;
 
-      // Forzar reflow
-      slides[nuevo].offsetHeight;
+      // Forzar reflow para que el cambio se aplique
+      void slides[nuevo].offsetWidth;
 
       // Mover slide actual fuera
-      slides[current].style.left = (direccion === 1 ? "-100%" : "100%");
+      slides[current].style.left = direccion === 1 ? "-100%" : "100%";
+      slides[current].style.zIndex = 1;
 
       // Mover slide nuevo al centro
       slides[nuevo].style.left = "0";
 
-      slides[current].addEventListener("transitionend", function handler() {
+      function onTransitionEnd() {
         slides[current].classList.remove("active");
         slides[current].style.left = "100%";
+        slides[current].style.zIndex = 0;
+        slides[current].removeEventListener("transitionend", onTransitionEnd);
         animating = false;
-        slides[current].removeEventListener("transitionend", handler);
-      });
+      }
+
+      slides[current].addEventListener("transitionend", onTransitionEnd);
 
       actualizarIndicadores(nuevo);
       current = nuevo;
