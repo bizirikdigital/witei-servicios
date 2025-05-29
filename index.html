@@ -1,4 +1,4 @@
-<div id="servicios-carrusel" style="font-family: Arial, sans-serif; color: #fff; position: relative; overflow: hidden; border-radius: 10px; max-width: 100%; height: 400px;">
+<div id="servicios-carrusel" style="font-family: Arial, sans-serif; color: #fff; position: relative; overflow: hidden; border-radius: 10px; max-width: 100%; height: 450px;">
   <style>
     #servicios-carrusel {
       --transition-time: 0.5s;
@@ -12,19 +12,45 @@
       left: 0;
       width: 100%;
       height: 100%;
-      padding: 40px;
       box-sizing: border-box;
+      padding: 60px 40px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       backdrop-filter: brightness(0.6);
       color: white;
-      transition: transform var(--transition-time) ease-in-out;
-      will-change: transform;
+      transition: opacity var(--transition-time) ease-in-out;
+      opacity: 0;
     }
 
-    .carrusel-slide.hidden {
-      pointer-events: none;
+    .carrusel-slide.visible {
+      opacity: 1;
+      z-index: 1;
+    }
+
+    .slide-content {
+      background: rgba(0, 0, 0, 0.55);
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 700px;
+    }
+
+    .slide-content h2 {
+      font-size: 30px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .slide-content ul {
+      margin: 0;
+      padding-left: 20px;
+      font-size: 16px;
+    }
+
+    .slide-content li {
+      margin-bottom: 8px;
     }
 
     .carrusel-nav {
@@ -32,21 +58,17 @@
       top: 50%;
       transform: translateY(-50%);
       font-size: 30px;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.6);
       padding: 10px;
       color: white;
       cursor: pointer;
       z-index: 10;
       user-select: none;
+      border-radius: 50%;
     }
 
-    .carrusel-nav.left {
-      left: 10px;
-    }
-
-    .carrusel-nav.right {
-      right: 10px;
-    }
+    .carrusel-nav.left { left: 20px; }
+    .carrusel-nav.right { right: 20px; }
 
     .carrusel-indicators {
       position: absolute;
@@ -58,109 +80,91 @@
 
     .carrusel-indicators span {
       display: inline-block;
-      width: 10px;
-      height: 10px;
-      margin: 0 5px;
-      background-color: rgba(255, 255, 255, 0.6);
+      width: 12px;
+      height: 12px;
+      margin: 0 6px;
+      background-color: rgba(255, 255, 255, 0.4);
       border-radius: 50%;
       cursor: pointer;
-      user-select: none;
+      transition: background-color 0.3s ease;
     }
 
     .carrusel-indicators .active {
       background-color: #fff;
     }
-
-    .carrusel-slide h2 {
-      font-size: 36px;
-      margin-bottom: 20px;
-      color: #ffffff;
-    }
-
-    .carrusel-slide ul {
-      margin: 0;
-      padding-left: 20px;
-    }
-
-    .carrusel-slide li {
-      margin-bottom: 8px;
-    }
   </style>
 
-  <div class="carrusel-slide" style="transform: translateX(0%);">
-    <h2>1. Compra y Venta de Inmuebles</h2>
-    <ul>
-      <li>Asesoramiento en la compra y venta de propiedades residenciales, comerciales y de inversión.</li>
-      <li>Acompañamiento legal y administrativo: contratos, escrituras y gestiones notariales.</li>
-      <li>Asesoramiento en financiación e hipotecas.</li>
-    </ul>
+  <!-- Slides -->
+  <div class="carrusel-slide visible">
+    <div class="slide-content">
+      <h2>🏡 Compra y Venta de Inmuebles</h2>
+      <ul>
+        <li>Asesoramiento en propiedades residenciales y comerciales.</li>
+        <li>Apoyo legal y notarial durante todo el proceso.</li>
+        <li>Gestión de hipotecas y financiación.</li>
+      </ul>
+    </div>
   </div>
 
-  <div class="carrusel-slide" style="transform: translateX(100%);">
-    <h2>2. Alquiler de Propiedades</h2>
-    <ul>
-      <li>Gestión integral de alquileres residenciales y comerciales.</li>
-      <li>Redacción de contratos y trámites legales asociados.</li>
-    </ul>
+  <div class="carrusel-slide">
+    <div class="slide-content">
+      <h2>📄 Alquiler de Propiedades</h2>
+      <ul>
+        <li>Gestión integral del alquiler.</li>
+        <li>Redacción de contratos y trámites legales.</li>
+      </ul>
+    </div>
   </div>
 
-  <div class="carrusel-slide" style="transform: translateX(100%);">
-    <h2>3. Gestión de Propiedades</h2>
-    <ul>
-      <li>Administración para propietarios que no pueden gestionar sus inmuebles.</li>
-      <li>Atención al inquilino, resolución de incidencias y cumplimiento de contratos.</li>
-    </ul>
+  <div class="carrusel-slide">
+    <div class="slide-content">
+      <h2>🛠️ Gestión de Propiedades</h2>
+      <ul>
+        <li>Administración de inmuebles para propietarios.</li>
+        <li>Atención al inquilino y gestión de incidencias.</li>
+      </ul>
+    </div>
   </div>
 
-  <div class="carrusel-slide" style="transform: translateX(100%);">
-    <h2>4. Inversiones Inmobiliarias</h2>
-    <ul>
-      <li>Análisis de oportunidades en residencial, comercial y terrenos.</li>
-      <li>Estudio de rentabilidad y riesgos de cada proyecto.</li>
-    </ul>
+  <div class="carrusel-slide">
+    <div class="slide-content">
+      <h2>📈 Inversiones Inmobiliarias</h2>
+      <ul>
+        <li>Análisis de oportunidades y estudios de rentabilidad.</li>
+        <li>Selección de proyectos con alta viabilidad.</li>
+      </ul>
+    </div>
   </div>
 
-  <div class="carrusel-slide" style="transform: translateX(100%);">
-    <h2>5. Reformas y Diseño de Inmuebles</h2>
-    <ul>
-      <li>Asesoramiento en reformas estéticas y funcionales para mejorar el valor de la propiedad.</li>
-    </ul>
+  <div class="carrusel-slide">
+    <div class="slide-content">
+      <h2>🎨 Reformas y Diseño</h2>
+      <ul>
+        <li>Mejoras estéticas y funcionales.</li>
+        <li>Optimización del valor del inmueble.</li>
+      </ul>
+    </div>
   </div>
 
-  <!-- Flechas -->
+  <!-- Navegación -->
   <div class="carrusel-nav left" onclick="moverCarrusel(-1)">&#10094;</div>
   <div class="carrusel-nav right" onclick="moverCarrusel(1)">&#10095;</div>
 
-  <!-- Puntos -->
+  <!-- Indicadores -->
   <div class="carrusel-indicators" id="carrusel-indicators"></div>
 
   <script>
     const slides = document.querySelectorAll(".carrusel-slide");
     const indicatorContainer = document.getElementById("carrusel-indicators");
     let current = 0;
-    let animating = false;
 
     function actualizarCarrusel(nuevo) {
-      if (animating || nuevo === current) return;
-      animating = true;
+      if (nuevo === current) return;
 
-      slides.forEach((slide, i) => {
-        if (i === nuevo) {
-          slide.style.transform = "translateX(0%)";
-        } else if (i < nuevo) {
-          slide.style.transform = "translateX(-100%)";
-        } else {
-          slide.style.transform = "translateX(100%)";
-        }
-      });
-
+      slides[current].classList.remove("visible");
+      slides[nuevo].classList.add("visible");
       actualizarIndicadores(nuevo);
-
-      // Esperar transición antes de liberar bloqueo
-      setTimeout(() => {
-        current = nuevo;
-        animating = false;
-      }, 500); // coincide con transition-time CSS
+      current = nuevo;
     }
 
     function moverCarrusel(direccion) {
